@@ -114,6 +114,7 @@ gir_DATA = Polkit-1.0.gir
 typelibsdir = $(INTROSPECTION_TYPELIBDIR)
 typelibs_DATA = Polkit-1.0.typelib
 
+INTROSPECTION_SCANNER_ARGS = --warn-all
 Polkit_1_0_gir_INCLUDES = Gio-2.0
 Polkit_1_0_gir_SCANNERFLAGS = --c-include='polkit/polkit.h'
 Polkit_1_0_gir_CFLAGS = \

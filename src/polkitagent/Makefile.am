@@ -122,6 +122,7 @@ PolkitAgent-1.0.gir: libpolkit-agent-1.la
 typelibsdir = $(INTROSPECTION_TYPELIBDIR)
 typelibs_DATA = PolkitAgent-1.0.typelib
 
+INTROSPECTION_SCANNER_ARGS = --warn-all
 INTROSPECTION_COMPILER_ARGS = --includedir=../../src/polkit
 INTROSPECTION_GIRS = PolkitAgent-1.0.gir
 PolkitAgent_1_0_gir_INCLUDES = Gio-2.0
