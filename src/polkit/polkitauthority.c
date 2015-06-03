@@ -1492,6 +1492,14 @@ polkit_authority_authentication_agent_response (PolkitAuthority      *authority,
                                                 gpointer              user_data)
 {
   GVariant *identity_value;
+  /* Note that in reality, this API is only accessible to root, and
+   * only called from the setuid helper `polkit-agent-helper-1`.
+   *
+   * However, because this is currently public API, we avoid
+   * triggering warnings from ABI diff type programs by just grabbing
+   * the real uid of the caller here.
+   */
+  uid_t uid = getuid ();
 
   g_return_if_fail (POLKIT_IS_AUTHORITY (authority));
   g_return_if_fail (cookie != NULL);
@@ -1502,7 +1510,8 @@ polkit_authority_authentication_agent_response (PolkitAuthority      *authority,
   g_variant_ref_sink (identity_value);
   g_dbus_proxy_call (authority->proxy,
                      "AuthenticationAgentResponse",
-                     g_variant_new ("(s@(sa{sv}))",
+                     g_variant_new ("(us@(sa{sv}))",
+                                    (guint32)uid,
                                     cookie,
                                     identity_value),
                      G_DBUS_CALL_FLAGS_NONE,
