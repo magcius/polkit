@@ -23,6 +23,7 @@
 #include "config.h"
 #include "polkitagenthelperprivate.h"
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
 
@@ -44,6 +45,37 @@ _polkit_clearenv (void)
 }
 #endif
 
+
+char *
+read_cookie (int argc, char **argv)
+{
+  /* As part of CVE-XXX-XXXX, we started passing the cookie
+   * on standard input, to ensure it's not visible to other
+   * processes.  However, to ensure that things continue
+   * to work if the setuid binary is upgraded while old
+   * agents are still running (this will be common with
+   * package managers), we support both modes.
+   */
+  if (argc == 3)
+    return strdup (argv[2]);
+  else
+    {
+      char *ret = NULL;
+      size_t n;
+      ssize_t r = getline (&ret, &n, stdin);
+      if (r == -1)
+        {
+          if (!feof (stdin))
+            perror ("getline");
+          return NULL;
+        }
+      else
+        {
+          g_strchomp (ret);
+          return ret;
+        }
+    }
+}
 
 gboolean
 send_dbus_message (const char *cookie, const char *user)
