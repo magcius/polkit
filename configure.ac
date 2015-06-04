@@ -49,78 +49,16 @@ AM_CONDITIONAL(MAN_PAGES_ENABLED, test x$enable_man_pages = xyes)
 
 GTK_DOC_CHECK([1.3])
 
-#### gcc warning flags
-
+changequote(,)dnl
 if test "x$GCC" = "xyes"; then
-  changequote(,)dnl
-  case " $CFLAGS " in
-  *[\ \	]-Wall[\ \	]*) ;;
-  *) CFLAGS="$CFLAGS -Wall" ;;
-  esac
-
-  case " $CFLAGS " in
-  *[\ \	]-Wchar-subscripts[\ \	]*) ;;
-  *) CFLAGS="$CFLAGS -Wchar-subscripts" ;;
-  esac
-
-  case " $CFLAGS " in
-  *[\ \	]-Wmissing-declarations[\ \	]*) ;;
-  *) CFLAGS="$CFLAGS -Wmissing-declarations" ;;
-  esac
-
-  case " $CFLAGS " in
-  *[\ \	]-Wnested-externs[\ \	]*) ;;
-  *) CFLAGS="$CFLAGS -Wnested-externs" ;;
-  esac
-
-  case " $CFLAGS " in
-  *[\ \	]-Wpointer-arith[\ \	]*) ;;
-  *) CFLAGS="$CFLAGS -Wpointer-arith" ;;
-  esac
-
-  case " $CFLAGS " in
-  *[\ \	]-Wcast-align[\ \	]*) ;;
-  *) CFLAGS="$CFLAGS -Wcast-align" ;;
-  esac
-
-  case " $CFLAGS " in
-  *[\ \	]-Wsign-compare[\ \	]*) ;;
-  *) CFLAGS="$CFLAGS -Wsign-compare" ;;
-  esac
-
-  case " $CFLAGS " in
-  *[\ \	]-Wformat[\ \	]*) ;;
-  *) CFLAGS="$CFLAGS -Wformat" ;;
-  esac
-
-  case " $CFLAGS " in
-  *[\ \	]-Wformat-security[\ \	]*) ;;
-  *) CFLAGS="$CFLAGS -Wformat-security" ;;
-  esac
-
-  if test "x$enable_ansi" = "xyes"; then
-    case " $CFLAGS " in
-    *[\ \	]-ansi[\ \	]*) ;;
-    *) CFLAGS="$CFLAGS -ansi" ;;
-    esac
-
-    case " $CFLAGS " in
-    *[\ \	]-D_POSIX_C_SOURCE*) ;;
-    *) CFLAGS="$CFLAGS -D_POSIX_C_SOURCE=199309L" ;;
-    esac
-
-    case " $CFLAGS " in
-    *[\ \	]-D_BSD_SOURCE[\ \	]*) ;;
-    *) CFLAGS="$CFLAGS -D_BSD_SOURCE" ;;
-    esac
-
-    case " $CFLAGS " in
-    *[\ \	]-pedantic[\ \	]*) ;;
-    *) CFLAGS="$CFLAGS -pedantic" ;;
-    esac
-  fi
-  changequote([,])dnl
+  CFLAGS="$CFLAGS -Wall -Wstrict-prototypes -Werror=missing-prototypes \
+		-Werror=implicit-function-declaration \
+		-Werror=pointer-arith -Werror=init-self -Werror=format=2 \
+		-Werror=format-security \
+		-Werror=missing-include-dirs -Werror=aggregate-return \
+		-Werror=declaration-after-statement"
 fi
+changequote([,])dnl
 
 PKG_CHECK_MODULES(GLIB, [gmodule-2.0 gio-2.0 >= 2.30.0])
 AC_SUBST(GLIB_CFLAGS)
