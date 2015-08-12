@@ -36,6 +36,7 @@ libpolkit_backend_1_la_SOURCES =                                   			\
 	polkitbackendactionpool.h		polkitbackendactionpool.c		\
 	polkitbackendconfigsource.h		polkitbackendconfigsource.c		\
 	polkitbackendactionlookup.h		polkitbackendactionlookup.c		\
+	duktape.c duktape.h \
         $(NULL)
 
 if HAVE_LIBSYSTEMD
@@ -49,9 +50,11 @@ endif
 libpolkit_backend_1_la_CFLAGS =                                        	\
         -D_POLKIT_COMPILATION                                  		\
         -D_POLKIT_BACKEND_COMPILATION                                  	\
+	-DDUK_OPT_HAVE_CUSTOM_H						\
+	-DDUK_OPT_INTERRUPT_COUNTER					\
+	-D'DUK_OPT_EXEC_TIMEOUT_CHECK(u)=polkit_js_exec_timeout_check(u)' \
         $(GLIB_CFLAGS)							\
 	$(LIBSYSTEMD_CFLAGS)						\
-	$(LIBJS_CFLAGS)							\
         $(NULL)
 
 libpolkit_backend_1_la_LIBADD =                               		\
@@ -59,7 +62,7 @@ libpolkit_backend_1_la_LIBADD =                               		\
 	$(LIBSYSTEMD_LIBS)						\
 	$(top_builddir)/src/polkit/libpolkit-gobject-1.la		\
 	$(EXPAT_LIBS)							\
-	$(LIBJS_LIBS)							\
+	-lm								\
         $(NULL)
 
 rulesdir = $(sysconfdir)/polkit-1/rules.d

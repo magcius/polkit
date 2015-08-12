@@ -167,7 +167,7 @@ polkit.addRule(function(action, subject) {
             while (true)
                 ;
         } catch (error) {
-            if (error == "Terminating runaway script")
+            if (error == "RangeError: execution timeout")
                 return polkit.Result.YES;
             return polkit.Result.NO;
         }
